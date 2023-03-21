@@ -1,17 +1,22 @@
 import json
 import re
 
+def parse_firstLine(line):
+    campos = line.split(',')
+    return campos
+
 def ex1(file):
     info = []
     with open(file,'r',encoding='utf-8') as f:
-        content = f.readlines()
-        content = content[1:]
+        data = f.readlines()
+        first_line = data[0]
+        campos = parse_firstLine(first_line)
+        content = data[1:]
         for line in content:
-            numero,nome,curso = line.split(',')
+            fields = line.split(',')
             dic = {}
-            dic['Numero'] = numero
-            dic['Nome'] = nome
-            dic['Curso'] = curso
+            for i in range(len(campos)):
+                dic[campos[i]] = fields[i]
             info.append(dic)
     
     return info
@@ -21,15 +26,14 @@ def ex2(file):
     with open(file,'r',encoding='utf-8') as f:
         data = f.readlines()
         first_line = data[0]
+        campos = parse_firstLine(first_line)
         content = data[1:]
-        print(content)
         n_grades = re.search(r'Notas{(\d+)}',first_line).group(1)
         for line in content:
             fields = line.split(',')
             dic = {}
-            dic['Numero'] = fields[0]
-            dic['Nome'] = fields[1]
-            dic['Curso'] = fields[2]
+            for i in range(3):
+                dic[campos[i]] = fields[i]
             grades = []
             for i in range(3,int(n_grades) + 3):
                 grades.append(int(fields[i]))
@@ -43,6 +47,7 @@ def ex3(file):
     with open(file,'r',encoding='utf-8') as f:
         data = f.readlines()
         first_line = data[0]
+        campos = parse_firstLine(first_line)
         content = data[1:]
         n_grades = re.search(r'Notas{(\d+),(\d+)}',first_line)
         min_grades = n_grades.group(1)
@@ -50,9 +55,8 @@ def ex3(file):
         for line in content:
             fields = line.split(',')
             dic = {}
-            dic['Numero'] = fields[0]
-            dic['Nome'] = fields[1]
-            dic['Curso'] = fields[2]
+            for i in range(3):
+                dic[campos[i]] = fields[i]
             grades = []
             for i in range(3,int(max_grades) + 3):
                 if fields[i] not in ['','\n']:
@@ -66,6 +70,7 @@ def ex4(file):
     with open(file,'r',encoding='utf-8') as f:
         data = f.readlines()
         first_line = data[0]
+        campos = parse_firstLine(first_line)
         content = data[1:]
         n_grades = re.search(r'Notas{(\d+),(\d+)}::(\w+)',first_line)
         min_grades = n_grades.group(1)
@@ -74,9 +79,8 @@ def ex4(file):
         for line in content:
             fields = line.split(',')
             dic = {}
-            dic['Numero'] = fields[0]
-            dic['Nome'] = fields[1]
-            dic['Curso'] = fields[2]
+            for i in range(3):
+                dic[campos[i]] = fields[i]
             grades = []
             for i in range(3,int(max_grades) + 3):
                 if fields[i] not in ['','\n']:
