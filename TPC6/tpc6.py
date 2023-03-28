@@ -16,30 +16,74 @@ tokens = [
           'INTERVALO',
           'PROGRAMA',
           'CONDICIONAL',
-          'FIM_FRASE'
+          'FIM_FRASE',
+          'NUMERO'
 ]
 
-t_COMENTARIO = r'\/\/.|\/\*(.|\n)*\*\/ '
-t_VARIAVEL = r'\w+'
-t_FUNCAO = r'(function\s)?\w+(?=\()'
-t_TIPO_DADOS = r'int'
-t_CICLO = r'(while|for)'
-t_OPERADOR = r'\+|-|\*|%|>|=|<|\,'
-t_TAMANHO = r'\[\w+\]'
-t_PARENT_INI = r'\('
-t_PARENT_FIM = r'\)'
-t_CHAVETA_INI = r'\{'
-t_CHAVETA_FIM = r'\}'
-t_INTERVALO = r'\[\d+\.\.\d+\]'
-
-def t_PROGRAMA(t):
-    r'(program\s)?\w+'
-    result = re.match(r'(program\s)?\w+',t.value)
+def t_NUMERO(t):
+    r'\d+'
+    return t
+def t_COMENTARIO(t):
+     r'\/\/.*|\/\*(.|\n)*\*\/ '
+     return t
+def t_TIPO_DADOS(t):
+    r'int'
+    result = re.match(r'(int)',t.value)
     t.value = result.group(1)
     return t
 
-t_CONDICIONAL = r'if|else|in'
-t_FIM_FRASE = r';'
+def t_CONDICIONAL(t):
+    r'if |else |in '
+    return t
+
+def t_FUNCAO(t):
+    r'(function\s)?\w+(?=\()'
+    return t
+
+def t_CICLO(t):
+    r'(while|for)'
+    return t
+def t_PROGRAMA(t):
+    r'program\s\w+'
+    #result = re.match(r'program\s\w+',t.value)
+    #t.value = result
+    return t
+def t_VARIAVEL(t):
+    r'(int\s)?\w+'
+    return t
+
+
+def t_OPERADOR(t):
+    r'\+|-|\*|%|>|=|<|\,'
+    return t
+
+def t_TAMANHO(t):
+    r'\[\w+\]'
+    return  t
+
+def t_PARENT_INI(t):
+    r'\('
+    return t
+
+def t_PARENT_FIM(t):
+    r'\)'
+    return t
+
+def t_CHAVETA_INI(t):
+    r'\{'
+    return t
+
+def t_CHAVETA_FIM(t):
+    r'\}'
+    return t
+
+def t_INTERVALO(t):
+    r'\[\d+\.\.\d+\]'
+    return t
+
+def t_FIM_FRASE(t):
+    r';'
+    return t
 
 def t_whitespace(t):
     r'\s+'
@@ -52,7 +96,7 @@ def t_error(t):
 t_ignore = ' \t\n'
 
 lexer = lex.lex(debug=True)
-f = open('factorial.p','r')
+f = open('max.p','r')
 source = ''
 for linha in f.readlines(): 
     source += linha
